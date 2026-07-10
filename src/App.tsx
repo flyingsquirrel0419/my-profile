@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from 'react'
 import { disciplines, projects, type Project } from './data'
 
 const EMAIL = 'flying_squirrel__@teamwicked.me'
+const PROFILE_IMAGE = `${import.meta.env.BASE_URL}assets/profile.jpg`
 const filters = ['All', 'TypeScript', 'Python', 'Rust'] as const
 type ProjectFilter = (typeof filters)[number]
 
@@ -28,7 +29,7 @@ function Header() {
   return (
     <header className="site-header">
       <a className="brand" href="#top" aria-label="Flying Squirrel home">
-        <img src="/assets/profile.jpg" alt="" />
+        <img src={PROFILE_IMAGE} alt="" />
         <span>Flying Squirrel</span>
       </a>
       <nav className="desktop-nav" aria-label="Primary navigation">
@@ -70,7 +71,7 @@ function Hero() {
         <div className="avatar-frame">
           <span className="corner corner--tl">+</span><span className="corner corner--tr">+</span>
           <span className="corner corner--bl">+</span><span className="corner corner--br">+</span>
-          <img src="/assets/profile.jpg" alt="Flying Squirrel pixel avatar" />
+          <img src={PROFILE_IMAGE} alt="Flying Squirrel pixel avatar" />
         </div>
       </div>
 
@@ -169,7 +170,7 @@ function Profile() {
           <p>I work across the whole path—from core behavior and failure recovery to packaging, documentation, and the command people type.</p>
         </div>
         <div className="profile-identity">
-          <img src="/assets/profile.jpg" alt="Flying Squirrel avatar" />
+          <img src={PROFILE_IMAGE} alt="Flying Squirrel avatar" />
           <div>
             <span>Flying Squirrel</span>
             <strong>날다람쥐 · Team WICKED</strong>

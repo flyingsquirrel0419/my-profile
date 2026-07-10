@@ -1,4 +1,5 @@
 export type ProjectAccent = 'acid' | 'blue' | 'orange' | 'red'
+const asset = (path: string) => `${import.meta.env.BASE_URL}assets/${path}`
 
 export type Project = {
   id: string
@@ -38,7 +39,7 @@ export const projects: Project[] = [
     tech: ['TypeScript', 'Node.js', 'Redis', 'Disk'],
     href: 'https://github.com/flyingsquirrel0419/layercache',
     linkLabel: 'View repository',
-    image: '/assets/projects/layercache-stampede.gif',
+    image: asset('projects/layercache-stampede.gif'),
     imageAlt: 'layercache stampede prevention demonstration',
     accent: 'acid',
   },
@@ -59,7 +60,7 @@ export const projects: Project[] = [
     tech: ['TypeScript', 'ESM', 'CJS', 'Zero deps'],
     href: 'https://github.com/flyingsquirrel0419/date-light',
     linkLabel: 'View repository',
-    image: '/assets/projects/date-light-mark.svg',
+    image: asset('projects/date-light-mark.svg'),
     imageAlt: 'date-light package mark',
     imageFit: 'contain',
     accent: 'blue',
@@ -81,7 +82,7 @@ export const projects: Project[] = [
     tech: ['Python', 'MCP', 'yt-dlp', 'Archives'],
     href: 'https://github.com/flyingsquirrel0419/unlimited-search',
     linkLabel: 'View repository',
-    image: '/assets/projects/unlimited-search.png',
+    image: asset('projects/unlimited-search.png'),
     imageAlt: 'unlimited-search public web reading pipeline',
     imageFit: 'cover',
     accent: 'orange',
@@ -103,7 +104,7 @@ export const projects: Project[] = [
     tech: ['Rust', 'Anthropic API', 'OpenAI API', 'CLI'],
     href: 'https://github.com/flyingsquirrel0419/claude-occ',
     linkLabel: 'View repository',
-    image: '/assets/projects/claude-occ.png',
+    image: asset('projects/claude-occ.png'),
     imageAlt: 'claude-occ provider routing overview',
     imageFit: 'contain',
     accent: 'blue',
@@ -125,7 +126,7 @@ export const projects: Project[] = [
     tech: ['Rust', 'Bytecode VM', 'Mark-sweep GC', 'test262'],
     href: 'https://github.com/flyingsquirrel0419/RuJa',
     linkLabel: 'View repository',
-    image: '/assets/projects/ruja.png',
+    image: asset('projects/ruja.png'),
     imageAlt: 'RuJa JavaScript runtime logo',
     imageFit: 'contain',
     accent: 'orange',
@@ -145,7 +146,7 @@ export const projects: Project[] = [
     tech: ['Discord.js', 'Shoukaku', 'Lavalink', 'Redis'],
     href: 'https://koreanbots.dev/bots/1419673280461148201',
     linkLabel: 'Open Iodine V2',
-    image: '/assets/iodine.webp',
+    image: asset('iodine.webp'),
     imageAlt: 'Iodine V2 Discord bot icon',
     imageFit: 'contain',
     accent: 'red',
