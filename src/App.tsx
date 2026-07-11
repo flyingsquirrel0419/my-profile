@@ -1,5 +1,4 @@
 import {
-  ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Check,
@@ -11,14 +10,15 @@ import {
   X,
 } from 'lucide-react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { createPortal } from 'react-dom'
 import { disciplines, projects, type Project } from './data'
-import SystemField from './SystemField'
 
 const EMAIL = 'flying_squirrel__@teamwicked.me'
 const PROFILE_IMAGE = `${import.meta.env.BASE_URL}assets/profile.jpg`
+const HERO_VIDEO = 'https://cdn.sceneai.art/Hero%20Section%20Video/c653421c-6cd9-472a-811a-b833dd320372.mp4'
 const filters = ['All', 'TypeScript', 'Python', 'Rust'] as const
 const accentColors = {
-  acid: '#d7ff2b',
+  acid: '#c7f05d',
   blue: '#6f94ff',
   orange: '#ff9f43',
   red: '#ff5c64',
@@ -28,19 +28,6 @@ type ProjectFilter = (typeof filters)[number]
 
 function usePageMotion() {
   useEffect(() => {
-    const root = document.documentElement
-    let ticking = false
-    const updateProgress = () => {
-      const available = document.documentElement.scrollHeight - window.innerHeight
-      root.style.setProperty('--scroll-progress', `${available > 0 ? window.scrollY / available : 0}`)
-      ticking = false
-    }
-    const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      window.requestAnimationFrame(updateProgress)
-    }
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -51,13 +38,40 @@ function usePageMotion() {
     }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' })
 
     document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element))
-    updateProgress()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('scroll', onScroll)
-    }
+    return () => observer.disconnect()
   }, [])
+}
+
+function BrandMark() {
+  return (
+    <svg className="h-7 w-auto" fill="none" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M4 6.5 16.8 3l12.8 3.5v9.2l-12.8 3.6L4 15.7V6.5Z" fill="#a855f7" />
+      <path d="m4 15.7 12.8 3.6 12.8-3.6v7.1l-12.8 3.7L4 22.8v-7.1Z" fill="#7e22ce" />
+      <path d="m4 22.8 12.8 3.7 12.8-3.7v4.7L16.8 31 4 27.5v-4.7Z" fill="#0a0a0a" />
+      <path d="M16.8 3v28" stroke="#eeeeee" strokeOpacity=".7" strokeWidth="1" />
+    </svg>
+  )
+}
+
+function MobileMenu({ onClose }: { onClose: () => void }) {
+  return createPortal(
+    <div className="mobile-menu fixed inset-0 bg-[#eeeeee]/95 backdrop-blur-xl z-[100] md:hidden">
+      <div className="flex items-center justify-between px-6 pt-6">
+        <a className="portfolio-brand" href="#top" onClick={onClose}><BrandMark /><span>Flying Squirrel</span></a>
+        <button className="mobile-menu-trigger" type="button" aria-label="Close menu" onClick={onClose}><X /></button>
+      </div>
+      <nav className="mobile-menu-links" aria-label="Mobile navigation">
+        {[['work', 'Work'], ['profile', 'Profile'], ['principles', 'Principles'], ['contact', 'Contact']].map(([id, label], index) => (
+          <a key={id} href={`#${id}`} onClick={onClose}><span>0{index + 1}</span>{label}<ArrowUpRight /></a>
+        ))}
+      </nav>
+      <div className="mobile-menu-footer">
+        <span>Seoul, KR</span>
+        <a href="https://github.com/flyingsquirrel0419" target="_blank" rel="noreferrer">GitHub <Github /></a>
+      </div>
+    </div>,
+    document.body,
+  )
 }
 
 function Header() {
@@ -65,73 +79,94 @@ function Header() {
 
   useEffect(() => {
     const close = (event: KeyboardEvent) => event.key === 'Escape' && setOpen(false)
+    document.body.classList.toggle('menu-open', open)
     window.addEventListener('keydown', close)
-    return () => window.removeEventListener('keydown', close)
-  }, [])
+    return () => {
+      document.body.classList.remove('menu-open')
+      window.removeEventListener('keydown', close)
+    }
+  }, [open])
 
   return (
-    <header className="site-header">
-      <a className="brand" href="#top" aria-label="Flying Squirrel home">
-        <span className="brand-mark" aria-hidden="true">FS</span>
+    <header className="w-full relative z-50 pt-6 px-6 lg:px-12 flex items-center justify-between animate-on-load delay-100">
+      <a className="portfolio-brand" href="#top" aria-label="Flying Squirrel home">
+        <BrandMark />
         <span>Flying Squirrel</span>
       </a>
-      <nav className="desktop-nav" aria-label="Primary navigation">
+      <nav className="hidden md:flex items-center gap-8 lg:gap-11" aria-label="Primary navigation">
         <a href="#work">Work</a>
         <a href="#profile">Profile</a>
-        <a href="#contact">Contact</a>
+        <a href="#principles">Principles</a>
       </nav>
-      <a className="github-link" href="https://github.com/flyingsquirrel0419" target="_blank" rel="noreferrer">
-        <Github /> <span>GitHub</span> <ArrowUpRight />
-      </a>
-      <button className="menu-button" type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
-        {open ? <X /> : <Menu />}
+      <div className="hidden md:flex items-center gap-6">
+        <a className="nav-github" href="https://github.com/flyingsquirrel0419" target="_blank" rel="noreferrer">GitHub <ArrowUpRight /></a>
+        <a className="nav-contact" href={`mailto:${EMAIL}`}>Let's talk</a>
+      </div>
+      <button className="mobile-menu-trigger md:hidden" type="button" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}>
+        <Menu />
       </button>
-      <nav className={`mobile-nav ${open ? 'is-open' : ''}`} aria-label="Mobile navigation">
-        {['work', 'profile', 'contact'].map((id) => (
-          <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>
-            {id === 'work' ? 'Work' : id[0].toUpperCase() + id.slice(1)} <ArrowUpRight />
-          </a>
-        ))}
-      </nav>
-      <div className="scroll-progress" aria-hidden="true"><span /></div>
+      {open ? <MobileMenu onClose={() => setOpen(false)} /> : null}
     </header>
   )
 }
 
 function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const syncPlayback = () => {
+      if (!videoRef.current) return
+      if (motion.matches) videoRef.current.pause()
+      else void videoRef.current.play()
+    }
+
+    syncPlayback()
+    motion.addEventListener('change', syncPlayback)
+    return () => motion.removeEventListener('change', syncPlayback)
+  }, [])
+
   return (
-    <section className="hero" id="top" aria-labelledby="hero-title">
-      <SystemField />
-      <div className="hero-grid page-shell">
-        <div className="hero-copy">
-          <h1 id="hero-title">
-            <span>I build</span>
-            <span>systems</span>
-            <span>that <em>hold.</em></span>
-          </h1>
-          <div className="hero-support">
-            <p>Backend systems, developer tools, and language runtimes, engineered in Seoul.</p>
-            <div className="hero-actions">
-              <a className="button button--primary" href="#work">Explore work <ArrowDown /></a>
-              <a className="button button--line" href="https://github.com/flyingsquirrel0419" target="_blank" rel="noreferrer">GitHub <ArrowUpRight /></a>
-            </div>
-          </div>
+    <section className="hero-stage relative min-h-[92svh] flex flex-col w-full overflow-hidden bg-[#eeeeee] text-black" id="top" aria-labelledby="hero-title">
+      <Header />
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0" aria-hidden="true">
+        <div className="hero-video-container relative w-[150%] aspect-square max-w-[800px] md:w-[800px] md:h-[800px] flex-shrink-0">
+          <video ref={videoRef} autoPlay loop muted playsInline preload="auto" className="w-full h-full object-cover" tabIndex={-1}>
+            <source src={HERO_VIDEO} type="video/mp4" />
+          </video>
+        </div>
+      </div>
+
+      <div className="hero-content relative z-10 flex-1 flex flex-col items-center justify-end px-6 text-center pb-8 md:pb-10 pt-24 mt-auto">
+        <div className="animate-on-load delay-200 bg-white border border-black/10 hover:border-black/20 rounded-full px-1.5 py-1.5 pr-4 mb-7 md:mb-9 shadow-sm inline-flex items-center gap-3 max-w-full">
+          <span className="bg-black text-white rounded-full px-2.5 py-1 text-[10px] uppercase font-bold flex-shrink-0">New</span>
+          <span className="text-black text-[9px] sm:text-[10px] uppercase tracking-widest font-medium truncate">2026 systems portfolio is live</span>
         </div>
 
-        <div className="hero-identity" aria-label="Flying Squirrel profile">
-          <div className="identity-coordinates"><span>37.5665 N</span><span>126.9780 E</span></div>
-          <div className="identity-image">
-            <img src={PROFILE_IMAGE} alt="Flying Squirrel pixel avatar" />
-            <span className="image-cursor" aria-hidden="true" />
-          </div>
-          <div className="identity-label"><strong>Flying Squirrel</strong><span>Team WICKED / Seoul</span></div>
-        </div>
+        <h1 className="hero-display animate-on-load delay-300 text-black text-[36px] md:text-[44px] lg:text-[56px] font-medium leading-[1.1] tracking-[-0.02em] max-w-[800px]" id="hero-title">
+          I build systems that keep<br className="hidden md:block" /> their shape.
+        </h1>
+        <p className="hero-subheadline animate-on-load delay-400 text-black/60 text-[16px] md:text-[18px] font-light mt-6 mb-8 md:mb-10 max-w-[600px]">
+          Backend infrastructure, developer tools, and language runtimes, engineered for the difficult parts.
+        </p>
+        <a className="group animate-on-load delay-500 bg-[#7e22ce] hover:bg-[#6b21a8] text-white border border-transparent pl-6 pr-2 py-2 rounded-full font-medium text-[15px] flex items-center gap-4 shadow-xl hover:shadow-2xl transition-all duration-300" href="#work" aria-label="Explore selected systems">
+          Explore the systems
+          <span className="w-8 h-8 rounded-full bg-white text-[#7e22ce] grid place-items-center">
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          </span>
+        </a>
+      </div>
+    </section>
+  )
+}
 
-        <div className="signal-rail" aria-label="Selected engineering signals">
-          <div><span>Cache stampede</span><strong>100 misses / 1 origin</strong></div>
-          <div><span>Runtime conformance</span><strong>5,060 scoped / 100%</strong></div>
-          <div><span>Package surface</span><strong>39 utilities / 3.11 KB</strong></div>
-        </div>
+function ProofRail() {
+  return (
+    <section className="proof-rail" aria-label="Selected engineering results">
+      <div className="page-shell proof-rail-grid">
+        <div><span>Cache stampede</span><strong>100 misses / 1 origin</strong></div>
+        <div><span>Runtime conformance</span><strong>5,060 scoped / 100%</strong></div>
+        <div><span>Package surface</span><strong>39 utilities / 3.11 KB</strong></div>
       </div>
     </section>
   )
@@ -253,7 +288,7 @@ function Profile() {
         </div>
       </div>
 
-      <div className="discipline-band">
+      <div className="discipline-band" id="principles">
         <div className="page-shell discipline-list">
           {disciplines.map((discipline) => (
             <article key={discipline.index} data-reveal>
@@ -313,11 +348,10 @@ function Contact() {
 export default function App() {
   usePageMotion()
   return (
-    <>
+    <div className="portfolio-app relative min-h-screen flex flex-col w-full overflow-x-hidden bg-[#eeeeee] text-black">
       <a className="skip-link" href="#work">Skip to projects</a>
-      <Header />
-      <main><Hero /><ProjectShowcase /><Profile /></main>
+      <main><Hero /><ProofRail /><ProjectShowcase /><Profile /></main>
       <Contact />
-    </>
+    </div>
   )
 }
