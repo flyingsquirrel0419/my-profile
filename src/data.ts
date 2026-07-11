@@ -12,6 +12,9 @@ export type Project = {
   problem: string
   build: string
   proof: string
+  signalLabel: string
+  impactLine: string
+  caseNotes: string[]
   tech: string[]
   href: string
   linkLabel: string
@@ -36,6 +39,13 @@ export const projects: Project[] = [
     build:
       'Request coalescing, automatic backfill, tag invalidation, stale serving, generation tracking, and framework integrations.',
     proof: '26 GitHub stars · 601 passing tests · 100 misses → 1 origin call',
+    signalLabel: 'Concurrency result',
+    impactLine: '100 simultaneous misses, one origin call.',
+    caseNotes: [
+      'Coalesces concurrent reads around one in-flight origin request.',
+      'Backfills Memory, Redis, and Disk while preserving invalidation semantics.',
+      'Serves stale data and tracks generations so failure remains controlled.',
+    ],
     tech: ['TypeScript', 'Node.js', 'Redis', 'Disk'],
     href: 'https://github.com/flyingsquirrel0419/layercache',
     linkLabel: 'View repository',
@@ -57,6 +67,13 @@ export const projects: Project[] = [
     build:
       'Immutable date-fns-style APIs, ESM and CJS entrypoints, generated types, migration guides, and release size checks.',
     proof: '5.9× smaller than 20 comparable date-fns imports · 13 stars',
+    signalLabel: 'Shipping surface',
+    impactLine: '39 typed utilities in 3.11 KB, with zero dependencies.',
+    caseNotes: [
+      'Keeps the familiar immutable helper shape without importing a broad runtime.',
+      'Ships ESM, CJS, and generated types from one tested source.',
+      'Treats bundle size and migration clarity as release requirements.',
+    ],
     tech: ['TypeScript', 'ESM', 'CJS', 'Zero deps'],
     href: 'https://github.com/flyingsquirrel0419/date-light',
     linkLabel: 'View repository',
@@ -79,6 +96,13 @@ export const projects: Project[] = [
     build:
       'Public routes, browser-like identities, feed and metadata recovery, archive fallbacks, media extraction, and attempt traces.',
     proof: 'PyPI package · 4 MCP tools · regression-tested live URL set',
+    signalLabel: 'Recovery pipeline',
+    impactLine: 'One URL enters; structured content and an attempt trace leave.',
+    caseNotes: [
+      'Escalates through public routes, metadata, feeds, archives, and media extraction.',
+      'Exposes four MCP tools as well as a direct Python CLI.',
+      'Keeps an attempt trace so recovery behavior stays inspectable.',
+    ],
     tech: ['Python', 'MCP', 'yt-dlp', 'Archives'],
     href: 'https://github.com/flyingsquirrel0419/unlimited-search',
     linkLabel: 'View repository',
@@ -101,6 +125,13 @@ export const projects: Project[] = [
     build:
       'Streaming translation, model discovery, loopback token auth, provider configuration, a launcher shim, and one-command native mode.',
     proof: 'npm CLI · Rust 2024 · localhost-first gateway',
+    signalLabel: 'Protocol boundary',
+    impactLine: 'One local gateway across Anthropic and OpenAI-compatible providers.',
+    caseNotes: [
+      'Translates streaming message surfaces instead of hiding provider differences.',
+      'Keeps credentials behind loopback token authentication.',
+      'Packages the Rust gateway behind an npm launcher for a short install path.',
+    ],
     tech: ['Rust', 'Anthropic API', 'OpenAI API', 'CLI'],
     href: 'https://github.com/flyingsquirrel0419/claude-occ',
     linkLabel: 'View repository',
@@ -123,6 +154,13 @@ export const projects: Project[] = [
     build:
       'Fuel metering, heap and call-stack caps, linear-time regex, panic-audited VM paths, and zero unsafe Rust.',
     proof: '5,060 scoped test262 cases at 100% · 96k+ fuzz iterations',
+    signalLabel: 'Runtime evidence',
+    impactLine: '5,060 scoped test262 cases at 100%, plus 96k fuzz iterations.',
+    caseNotes: [
+      'Compiles JavaScript into custom bytecode executed by an embeddable VM.',
+      'Bounds fuel, heap, call depth, and regular-expression work.',
+      'Keeps the runtime in safe Rust and audits VM paths for panic behavior.',
+    ],
     tech: ['Rust', 'Bytecode VM', 'Mark-sweep GC', 'test262'],
     href: 'https://github.com/flyingsquirrel0419/RuJa',
     linkLabel: 'View repository',
@@ -143,6 +181,13 @@ export const projects: Project[] = [
     problem: 'Voice sessions and queues need to survive routine updates and process restarts.',
     build: 'Lavalink playback, Redis queue recovery, and multi-bot voice routing.',
     proof: 'Production project · public KoreanBots listing',
+    signalLabel: 'Operational focus',
+    impactLine: 'Queues recover across restarts while voice routing stays available.',
+    caseNotes: [
+      'Runs playback through Lavalink with Discord.js and Shoukaku.',
+      'Persists queue state in Redis so routine restarts do not erase the room.',
+      'Supports multi-bot voice routing for production operation.',
+    ],
     tech: ['Discord.js', 'Shoukaku', 'Lavalink', 'Redis'],
     href: 'https://koreanbots.dev/bots/1419673280461148201',
     linkLabel: 'Open Iodine V2',
