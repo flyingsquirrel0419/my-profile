@@ -64,7 +64,7 @@ export default function SystemField() {
       previousTime = time
       context.clearRect(0, 0, width, height)
 
-      context.strokeStyle = 'rgba(154, 166, 174, 0.09)'
+      context.strokeStyle = 'rgba(139, 92, 246, 0.07)'
       context.lineWidth = 1
       for (let x = 0; x < width; x += 72) {
         context.beginPath()
@@ -108,7 +108,7 @@ export default function SystemField() {
           const distance = Math.hypot(node.x - next.x, node.y - next.y)
           if (distance > 142) continue
           const alpha = (1 - distance / 142) * 0.28
-          context.strokeStyle = `rgba(126, 162, 255, ${alpha})`
+          context.strokeStyle = `rgba(167, 139, 250, ${alpha})`
           context.beginPath()
           context.moveTo(node.x, node.y)
           context.lineTo(next.x, next.y)
@@ -119,15 +119,15 @@ export default function SystemField() {
       nodes.forEach((node, index) => {
         const pulse = reducedMotion ? 1 : 0.62 + Math.sin(time * 0.0018 + node.phase) * 0.25
         context.fillStyle = index % 7 === 0
-          ? `rgba(215, 255, 43, ${pulse})`
-          : `rgba(225, 232, 236, ${pulse * 0.7})`
+          ? `rgba(255, 176, 84, ${pulse})`
+          : `rgba(238, 232, 255, ${pulse * 0.7})`
         context.beginPath()
         context.arc(node.x, node.y, node.size, 0, TAU)
         context.fill()
       })
 
       const scanY = reducedMotion ? height * 0.44 : (time * 0.055) % Math.max(height, 1)
-      context.strokeStyle = 'rgba(215, 255, 43, 0.3)'
+      context.strokeStyle = 'rgba(232, 121, 249, 0.22)'
       context.beginPath()
       context.moveTo(0, scanY + 0.5)
       context.lineTo(width, scanY + 0.5)

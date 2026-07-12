@@ -1,4 +1,13 @@
 export type ProjectAccent = 'acid' | 'blue' | 'orange' | 'red'
+
+/** Night-glide accent tones, one per project family. */
+export const accentHex: Record<ProjectAccent, string> = {
+  acid: '#6ee7c7',
+  blue: '#8ab6ff',
+  orange: '#ffb054',
+  red: '#ff7d9c',
+}
+
 const asset = (path: string) => `${import.meta.env.BASE_URL}assets/${path}`
 
 export type Project = {
@@ -51,6 +60,7 @@ export const projects: Project[] = [
     linkLabel: 'View repository',
     image: asset('projects/layercache-stampede.gif'),
     imageAlt: 'layercache stampede prevention demonstration',
+    imageFit: 'contain',
     accent: 'acid',
   },
   {
